@@ -1,5 +1,5 @@
 from os import times
-from turtle import pd
+#from turtle import pd
 import sqlalchemy
 import pandas as pd
 from sqlalchemy.orm import sessionmaker
