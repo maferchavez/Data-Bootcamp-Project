@@ -6,6 +6,7 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import timedelta, datetime
 from psycopg2.extras import execute_values
+import zipfile
 
 #DAG default arguments
 
@@ -26,6 +27,10 @@ def csv_to_postgres():
     pg_hook = PostgresHook(postgres_conn_id='conn_postgress')
     get_postgres_conn = pg_hook.get_connn()
     curr = get_postgres_conn.cursor('cursor')
+    
+    #unzip data file
+    with zipfile.ZipFile('Data-Bootcamp-Project/data/user_purchase.zip', 'r') as zip_ref:
+        zip_ref.extractall('Data-Bootcamp-Project/data')
 
     #CSV loading to table
     file = 'Data-Bootcamp-Project/data/user_purchase.csv'
