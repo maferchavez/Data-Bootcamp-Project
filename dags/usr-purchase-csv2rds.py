@@ -17,7 +17,7 @@ default_args = {
     'email_on_failure': True,
     'retries' : 1,
     'retries_delay': timedelta(minutes=1)
-    'start_date': airflow.utils.dates.days_ago(1)
+    "start_date": airflow.utils.dates.days_ago(1),
 }
 
 #DAG assigment
