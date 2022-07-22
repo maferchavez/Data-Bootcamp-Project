@@ -16,8 +16,8 @@ default_args = {
     'email': ['maryfer.chavezromo@gmail.com'],
     'email_on_failure': True,
     'retries' : 1,
-    'retries_delay': timedelta(minutes=1)
-    "start_date": airflow.utils.dates.days_ago(1),
+    'retries_delay': timedelta(minutes=1),
+    'start_date': days_ago(0,0,0,0,0)
 }
 
 #DAG assigment
