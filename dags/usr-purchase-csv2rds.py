@@ -17,7 +17,7 @@ default_args = {
     'email_on_failure': True,
     'retries' : 1,
     'retries_delay': timedelta(minutes=1),
-    'start_date': days_ago(0,0,0,0,0)
+    'start_date': datetime(2022,6,1)
 }
 
 #DAG assigment
