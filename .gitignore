@@ -1,0 +1,22 @@
+### PyCharm ###
+.project
+.idea/*
+.vscode
+
+### eclipse ###
+.pydevproject
+
+*.iml
+*.DS_Store
+*.pylintrc
+
+### docker ###
+*.dockerfile
+
+### Pyc ###
+*.ini
+venv/*
+### terraform ###
+.terraform/
+terrafrom.tfstate
+.terraform.lock.hcl
