@@ -2,8 +2,9 @@
 
 from airflow.models import DAG
 from airflow.operators.dummy import DummyOperator #an operator to fill with something, it does not do anything
+from airflow.utils.dates import days_ago
 
-with DAG("db_ingestion") as dag:#Instanciate and load a DAG object
+with DAG("db_ingestion", start_date = days_ago(1)) as dag:#Instanciate and load a DAG object
     """
     Defing tasks of a workflow process
         VALIDATE: Validate the presence of source data.
