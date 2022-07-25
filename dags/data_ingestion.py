@@ -48,7 +48,7 @@ with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') 
         task_id='verify_data',
         postgres_conn_id = 'example',
         sql = """
-                SELECT COUNT * FROM user_purchase
+                SELECT COUNT * FROM user_purchase;
                             """)
     end_workflow = DummyOperator(task_id='end_workflow')
 
