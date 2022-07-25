@@ -16,7 +16,7 @@ with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') 
     validate = DummyOperator(task_id='validate') 
     prepare = PostgresOperator(
         task_id='prepare',
-        postgres_conn_id = 'ml_conn',#how to do a connection via airflow?
+        postgres_conn_id = 'example',#how to do a connection via airflow?
         sql = '') 
     load = DummyOperator(task_id='load') 
     end_workflow = DummyOperator(task_id='end_workflow')
