@@ -9,6 +9,7 @@ from airflow.operators.python import PythonOperator #this module is for the load
 from airflow.providers.postgres.hooks.postgres import PostgresHook #this module is for make the connection between postgres and airflow
 import pandas as pd #used for extract data from zip
 import sqlite3 #used in method of convert dataframe to sql and load to table created
+
  
 def ingest_data():
     hook = PostgresHook(postgres_conn_id='example') #create a hook and connection
@@ -48,7 +49,7 @@ with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') 
         task_id='verify_data',
         postgres_conn_id = 'example',
         sql = """
-                SELECT COUNT * FROM user_purchase;
+                SELECT COUNT (*) FROM user_purchase;
                             """)
     end_workflow = DummyOperator(task_id='end_workflow')
 
