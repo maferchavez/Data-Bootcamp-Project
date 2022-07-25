@@ -53,7 +53,12 @@ with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') 
                             );
                             """) 
     load = PythonOperator(task_id='load', python_callable=ingest_data)
-    verify_data = PythonOperator(task_id='verify_data', python_callable=verify_data_func)
+    verify_data = PostgresOperator(
+        task_id = 'verify_data',
+        postgres_conn_id = 'example',
+        sql = "SELECT COUNT(*) FROM user_purchase"
+    )
+    #verify_data = PythonOperator(task_id='verify_data', python_callable=verify_data_func)
     end_workflow = DummyOperator(task_id='end_workflow')
 
     #set up workflow
