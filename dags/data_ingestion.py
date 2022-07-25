@@ -18,7 +18,7 @@ with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') 
         task_id='prepare',
         postgres_conn_id = 'example',#how to do a connection via airflow?
         sql = """
-                CREATE A TABLE IF NOT EXISTS user_purchase(
+                CREATE TABLE IF NOT EXISTS user_purchase(
                     invoice_number varchar(10),
                     stock_code varchar(20),
                     detail varchar(1000),
