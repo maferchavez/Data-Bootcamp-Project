@@ -4,6 +4,19 @@ from airflow.models import DAG
 from airflow.operators.dummy import DummyOperator #an operator to fill with something, it does not do anything
 from airflow.utils.dates import days_ago #used it for the start_date of dag inizialization
 from airflow.providers.postgres.operators.postgres import PostgresOperator # used for prepare task to setup environment for landing data
+from airflow.operators.python import PythonOperator #this module is for the load step
+from airflow.providers.postgres.hooks.postgres import PostgresHook #this module is for make the connection between postgres and airflow
+import pandas as pd
+ 
+def ingest_data():
+    hook = PostgresHook(postgres_conn_id='example') #create a hook and connection
+    get_postgres_conn = hook.get_connn()
+    curr = get_postgres_conn.cursor('cursor')
+    df = pd.read_csv("https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/raw_data/user_purchase.zip")
+    with open(df, 'r') as f:
+        next (f)
+        curr.copy_from(f, 'user_purchase',sep=',')
+        get_postgres_conn.commit()
 
 with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') as dag:#Instanciate and load a DAG object
     """
@@ -29,7 +42,7 @@ with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') 
                     country varchar(20)
                             );
                             """) 
-    load = DummyOperator(task_id='load') 
+    load = PythonOperator(task_id='load', python_callable=ingest_data) 
     end_workflow = DummyOperator(task_id='end_workflow')
 
     #set up workflow
