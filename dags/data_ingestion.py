@@ -8,13 +8,16 @@ from airflow.providers.postgres.operators.postgres import PostgresOperator # use
 from airflow.operators.python import PythonOperator #this module is for the load step
 from airflow.providers.postgres.hooks.postgres import PostgresHook #this module is for make the connection between postgres and airflow
 import pandas as pd
+import sqlite3
  
 def ingest_data():
     hook = PostgresHook(postgres_conn_id='example') #create a hook and connection
-    get_postgres_conn = hook.get_conn()
-    curr = get_postgres_conn.cursor('cursor')
+    #get_postgres_conn = hook.get_conn()
+    #curr = get_postgres_conn.cursor('cursor')
+    conn = sqlite3.connect('user_purchase')
+    c= conn.cursor()
     df = pd.read_csv("https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/raw_data/user_purchase.zip")
-    df.to_sql('user_purchase', get_postgres_conn, if_exists='replace', index = False)
+    df.to_sql('user_purchase', conn, if_exists='replace', index = False)
 
 with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') as dag:#Instanciate and load a DAG object
     """
