@@ -2,13 +2,13 @@
 
 from airflow.models import DAG
 from airflow.operators.dummy import DummyOperator #an operator to fill with something, it does not do anything
-from airflow.utils.dates import days_ago
-from sqlalchemy import create_engine #used it for the start_date of dag inizialization
+from airflow.utils.dates import days_ago #used it for the start_date of dag inizialization
+#from sqlalchemy import create_engine 
 from airflow.providers.postgres.operators.postgres import PostgresOperator # used for prepare task to setup environment for landing data
 from airflow.operators.python import PythonOperator #this module is for the load step
 from airflow.providers.postgres.hooks.postgres import PostgresHook #this module is for make the connection between postgres and airflow
-import pandas as pd
-import sqlite3
+import pandas as pd #used for extract data from zip
+import sqlite3 #used in method of convert dataframe to sql and load to table created
  
 def ingest_data():
     hook = PostgresHook(postgres_conn_id='example') #create a hook and connection
@@ -43,8 +43,15 @@ with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') 
                     country varchar(20)
                             );
                             """) 
-    load = PythonOperator(task_id='load', python_callable=ingest_data) 
+    load = PythonOperator(task_id='load', python_callable=ingest_data)
+    verify_data = PostgresOperator(
+        task_id='verify_data',
+        postgres_conn_id = 'example',#how to do a connection via airflow?
+        sql = """
+                SELECT COUNT (InvoiceNo)
+                FROM user_purchase
+                            """)
     end_workflow = DummyOperator(task_id='end_workflow')
 
     #set up workflow
-    start_workflow >> validate >> prepare >> load >> end_workflow
+    start_workflow >> validate >> prepare >> load >> verify_data >> end_workflow
