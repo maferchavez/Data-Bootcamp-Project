@@ -26,7 +26,7 @@ def verify_data_func():
     pg_conn = hook.get_conn()
     cursor = pg_conn.cursor()
     count = cursor.execute(sql_stmt)
-    print (count)
+    return (count)
     
 with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') as dag:#Instanciate and load a DAG object
     """
