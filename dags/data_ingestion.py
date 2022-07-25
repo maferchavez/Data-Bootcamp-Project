@@ -10,7 +10,7 @@ import pandas as pd
  
 def ingest_data():
     hook = PostgresHook(postgres_conn_id='example') #create a hook and connection
-    get_postgres_conn = hook.get_connn()
+    get_postgres_conn = hook.get_conn()
     curr = get_postgres_conn.cursor('cursor')
     df = pd.read_csv("https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/raw_data/user_purchase.zip")
     with open(df, 'r') as f:
