@@ -10,7 +10,7 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook #this module 
 import pandas as pd #used for extract data from zip
 import sqlite3 #used in method of convert dataframe to sql and load to table created
 
- 
+#function for python operator in load step 
 def ingest_data():
     hook = PostgresHook(postgres_conn_id='example') #create a hook and connection
     #get_postgres_conn = hook.get_conn()
@@ -20,6 +20,14 @@ def ingest_data():
     df = pd.read_csv("https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/raw_data/user_purchase.zip")
     df.to_sql('user_purchase', conn, if_exists='replace', index = False)
 
+def verify_data_func():
+    sql_stmt = "SELECT COUNT(*) FROM user_purchase"
+    hook = PostgresHook(postgres_conn_id='example')
+    pg_conn = hook.get_conn()
+    cursor = pg_conn.cursor()
+    count = cursor.excecute(sql_stmt)
+    print (count)
+    
 with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') as dag:#Instanciate and load a DAG object
     """
     Defing tasks of a workflow process
@@ -45,12 +53,7 @@ with DAG("db_ingestion", start_date = days_ago(1), schedule_interval = '@once') 
                             );
                             """) 
     load = PythonOperator(task_id='load', python_callable=ingest_data)
-    verify_data = PostgresOperator(
-        task_id='verify_data',
-        postgres_conn_id = 'example',
-        sql = """
-                SELECT COUNT (*) FROM user_purchase;
-                            """)
+    verify_data = PythonOperator(task_id='verify_data', python_callable=verify_data_func)
     end_workflow = DummyOperator(task_id='end_workflow')
 
     #set up workflow
