@@ -11,7 +11,8 @@ variable "versioning" {
 }
 
 variable "subnet_s3" {
-  type = string
+  #type = string
+  description = "Private subnet where the S3 instance is going to be placed"
 }
 
 variable "vpc_id_s3" {
