@@ -22,7 +22,7 @@ with DAG(
         task_id='upload_to_s3',
         python_callable=upload_to_s3,
         op_kwargs={
-            'filename': 'C:/Users/maryf/Documents/Data-bootcamp/My-project/data/log_reviews.csv',
+            'filename': 'https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/data/log_reviews.csv',
             'key': 'log_reviews.csv',
             'bucket_name': 's3-data-bootcamp'
         }
