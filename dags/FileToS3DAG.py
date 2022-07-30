@@ -38,10 +38,10 @@ endpoints = [{"name": "issues",
               "load_type": "rebuild"}]
 
 # Github Orgs (cut a few out for faster)
-orgs = [{'name': 'astronomerio',
-         'github_conn_id': 'astronomerio-github'},
+orgs = [{'name': 'maferchavez',
+         'github_conn_id': 'maferchavez-github'},
         {'name': 'airflow-plugins',
-         'github_conn_id': 'astronomerio-github'}]
+         'github_conn_id': 'maferchavez-github'}]
 
 with dag:
     kick_off_dag = DummyOperator(task_id='kick_off_dag')
@@ -61,5 +61,5 @@ with dag:
                                         s3_key='github/{0}/{1}.json'
                                         .format(org['name'], endpoint['name']))
 
-            kick_off_dag >> github >> finished_api_calls
+kick_off_dag >> github >> finished_api_calls
     
