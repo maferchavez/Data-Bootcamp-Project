@@ -1,6 +1,6 @@
 from airflow.utils.decorators import apply_defaults
 from airflow.models import BaseOperator
-from my_modules.githubhook import GithubHook
+from my_modules.GithubHook import GithubHook
 from airflow.hooks import S3Hook
 from flatten_json import flatten #modules for flatter the hierarchy in your object which can be useful if you want to force your objects into a table.
 import logging
@@ -254,3 +254,4 @@ class GithubToS3Operator (BaseOperator):
             return record
 
         return process(record, mapping)
+        #https://www.astronomer.io/blog/an-airflow-story-1/#apache-airflow
