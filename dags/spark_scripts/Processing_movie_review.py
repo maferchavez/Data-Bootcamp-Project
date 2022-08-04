@@ -29,3 +29,6 @@ cool_df = mini_df.select("cid","id_review", array_contains(mini_df.Cleaned, "goo
 
 #output dataframe
 super_df= cool_df.select(col("cid"), col("id_review"),col("positive_review").cast("integer"))
+
+# Save df
+super_df.write.mode("overwrite").parquet(".")

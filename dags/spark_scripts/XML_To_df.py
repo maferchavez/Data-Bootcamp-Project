@@ -49,3 +49,6 @@ extract_log_info_udf = udf(extract_log_info, extract_log_info_schema)
 
 # Output dataframe
 another_df = mini_df.withColumn("info", extract_log_info_udf('log')).select('id_review', 'info.logDate', 'info.device', 'info.location', 'info.os', 'info.ipAddress', 'info.phoneNumber')
+
+# Save df
+another_df.write.mode("overwrite").parquet(".")
