@@ -52,3 +52,5 @@ another_df = mini_df.withColumn("info", extract_log_info_udf('log')).select('id_
 
 # Save df
 another_df.write.mode("overwrite").parquet("s3://s3-data-bootcamp-20220804183240579100000005/output")
+
+spark.stop()

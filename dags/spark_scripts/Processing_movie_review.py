@@ -32,3 +32,5 @@ super_df= cool_df.select(col("cid"), col("id_review"),col("positive_review").cas
 
 # Save df
 super_df.write.mode("overwrite").parquet("s3://s3-data-bootcamp-20220804183240579100000005/output/")
+
+spark.stop()
