@@ -12,7 +12,7 @@ from pyspark.sql.types import *
 spark = SparkSession.builder.getOrCreate()
 
 # Create a new data frame for movie_review.csv
-log_df = spark.read.csv('C:/Users/maryf/Capstone project/log_reviews.csv', sep=',', header=True)
+log_df = spark.read.csv('s3://s3-data-bootcamp-20220804183240579100000005/raw/log_reviews.csv', sep=',', header=True)
 
 # Take a little part of the data frame to make tests.
 mini_df = log_df.limit(100000)
@@ -51,4 +51,4 @@ extract_log_info_udf = udf(extract_log_info, extract_log_info_schema)
 another_df = mini_df.withColumn("info", extract_log_info_udf('log')).select('id_review', 'info.logDate', 'info.device', 'info.location', 'info.os', 'info.ipAddress', 'info.phoneNumber')
 
 # Save df
-another_df.write.mode("overwrite").parquet(".")
+another_df.write.mode("overwrite").parquet("s3://s3-data-bootcamp-20220804183240579100000005/output")
