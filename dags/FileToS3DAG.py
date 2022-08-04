@@ -12,7 +12,7 @@ default_args = {'owner': 'airflow',
 
 dag = DAG('github_to_redshift',
           default_args=default_args,
-          schedule_interval='@daily',
+          schedule_interval='@once',
           catchup=False
           )
 
