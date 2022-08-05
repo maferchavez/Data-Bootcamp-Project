@@ -121,7 +121,7 @@ default_args = {
 dag = DAG(
     'spark_submit_airflow',
     default_args = default_args,
-    schedule_interval = '0 10 * * *',
+    #schedule_interval = '0 10 * * *',
     max_active_runs = 1
 )
 # 0. start pipeline
