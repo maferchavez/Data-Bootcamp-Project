@@ -1,7 +1,7 @@
 from airflow import DAG
 from datetime import datetime
 from airflow.operators.dummy_operator import DummyOperator
-from my_modules.GithubToS3Operator import GithubToS3Operator
+from my_modules.GithubToS3BucketOperator import GithubToS3BucketOperator
 
 default_args = {'owner': 'airflow',
                 'start_date': datetime(2018, 1, 5),
