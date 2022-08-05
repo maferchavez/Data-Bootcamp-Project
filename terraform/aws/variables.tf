@@ -95,7 +95,7 @@ variable "number_of_instances" {
 
 
 ### S3 ###
-variable "bucket_prefix" {
+variable "bucket" {
   description = "A prefix will be added to a random name"
   type        = string
 }

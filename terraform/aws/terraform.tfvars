@@ -64,9 +64,9 @@ db_password = "dbpassword"
 publicly_accessible = false
 
 #### S3 variables ####
-bucket_prefix = "s3-data-bootcamp-"
+bucket = "Mafer_bucket_DEB"
 
-acl = "private"
+acl = "public-read-write"
 
 versioning = true
 
