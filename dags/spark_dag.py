@@ -10,12 +10,12 @@ from airflow.contrib.operators.emr_terminate_job_flow_operator import (
 )
 from airflow.models import Variable
 
-classification_s3_script = "scripts/random_text_classification.py"
-user_behavior_s3_script = "scripts/user_behavior_metrics.py"
-reviews_input_path = "data/movie_review.csv"
-purchases_input_path = "data/user_purchase.csv"
-classification_output_path = "data/reviews"
-user_behavior_output_path = "data/behavior"
+processing_movie_review_script = "spark_scripts/Processing_movie_review.py"
+xml_log_to_df_script = "spark_scripts/XML_To_df.py"
+reviews_input_path = "raw_data/movie_review.zip"
+reviews_log_input_path = "raw_data/log_reviews.zip"
+processing_movie_review_output_path = "data/reviews"
+xml_log_to_df_output_path = "data/review_logs"
 spark_bucket = Variable.get("SPARK_BUCKET")
 
 # Spark gets the input and stores the output in S3,
@@ -24,7 +24,7 @@ spark_bucket = Variable.get("SPARK_BUCKET")
 # These can be put inside a function for portability
 SPARK_STEPS = [
     {
-        "Name": "Classify movie reviews",
+        "Name": "Processing_movie_reviews",
         "ActionOnFailure": "CANCEL_AND_WAIT",
         "HadoopJarStep": {
             "Jar": "command-runner.jar",
@@ -32,35 +32,31 @@ SPARK_STEPS = [
                 "spark-submit",
                 "--deploy-mode",
                 "client",  # Can be changed to cluster
-                "s3://{{ params.SPARK_BUCKET }}/{{ params.classification_s3_script }}",
+                "s3://{{ params.SPARK_BUCKET }}/{{ params.processing_movie_review_script }}",
                 "--input",
                 "s3://{{ params.RAW_BUCKET }}/{{ params.reviews_input_path }}",
                 "--output",
-                "s3://{{ params.STAGING_BUCKET }}/{{ params.classification_output_path }}",
+                "s3://{{ params.STAGING_BUCKET }}/{{ params.processing_movie_review_output_path }}",
             ],
         },
     },
     {
-        "Name": "Calculate user behavior metrics",
+        "Name": "Extraxt data from logs reviews",
         "ActionOnFailure": "CANCEL_AND_WAIT",
         "HadoopJarStep": {
             "Jar": "command-runner.jar",
             "Args": [
                 "spark-submit",
                 "--deploy-mode",
-                "client",
-                "s3://{{ params.SPARK_BUCKET }}/{{ params.user_behavior_s3_script }}",
-                "--reviews",
-                "s3://{{ params.STAGING_BUCKET }}/{{ params.classification_output_path }}",
-                "--purchases",
-                "s3://{{ params.STAGING_BUCKET }}/{{ params.purchases_input_path }}",
-                "--date",
-                "{{ ts }}",
+                "client",  # Can be changed to cluster
+                "s3://{{ params.SPARK_BUCKET }}/{{ params.xml_log_to_df_script }}",
+                "--input",
+                "s3://{{ params.RAW_BUCKET }}/{{ params.reviews_log_input_path }}",
                 "--output",
-                "s3://{{ params.STAGING_BUCKET }}/{{ params.user_behavior_output_path }}",
+                "s3://{{ params.STAGING_BUCKET }}/{{ params.xml_log_to_df_output_path }}",
             ],
         },
-    },
+    }
 ]
 
 # Could add a function
@@ -106,7 +102,7 @@ JOB_FLOW_OVERRIDES = {
 }
 
 default_args = {
-    "owner": "ivan.galaviz",
+    "owner": "mafer chávez",
     "depends_on_past": False,
     "start_date": airflow.utils.dates.days_ago(1),
 }
@@ -135,12 +131,12 @@ with DAG(
             "SPARK_BUCKET": spark_bucket,
             "RAW_BUCKET": Variable.get("RAW_BUCKET"),
             "STAGING_BUCKET": Variable.get("STAGING_BUCKET"),
-            "user_behavior_s3_script": user_behavior_s3_script,
-            "classification_s3_script": classification_s3_script,
+            "processing_movie_review_script": processing_movie_review_script,
+            "xml_log_to_df_script": xml_log_to_df_script,
             "reviews_input_path": reviews_input_path,
-            "classification_output_path": classification_output_path,
-            "purchases_input_path": purchases_input_path,
-            "user_behavior_output_path": user_behavior_output_path,
+            "reviews_log_input_path": reviews_log_input_path,
+            "processing_movie_review_output_path": processing_movie_review_output_path,
+            "xml_log_to_df_output_path": xml_log_to_df_output_path,
         },
     )
 
