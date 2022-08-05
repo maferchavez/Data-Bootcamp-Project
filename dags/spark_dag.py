@@ -110,7 +110,7 @@ default_args = {
     'depends_on_past': True,
     'wait_for_downstram': True,
     'start_date': datetime(2022, 8, 5),
-    'email': [airflow@airflow.com],
+    'email': ["airflow@airflow.com"],
     'email_on_failure': False, 
     'email_on_retry': False, 
     'retries': 1, 
