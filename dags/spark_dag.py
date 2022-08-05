@@ -118,78 +118,78 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-dag = DAG(
+with DAG(
     'spark_submit_airflow',
     default_args = default_args,
     schedule_interval = '0 10 * * *',
     max_active_runs = 1
-)
-# 0. start pipeline
-start_pipeline_emr = DummyOperator(task_id = 'start_pipeline_emr')
+) as dag:
+    # 0. start pipeline
+    start_pipeline_emr = DummyOperator(task_id = 'start_pipeline_emr')
 
-# 1. Move data and scripts to the cloud (S3)
-# DAG for data
-data_to_s3 = PythonOperator( 
-    dag = dag, 
-    task_id = 'data_to_S3',
-    python_callable = upload_to_s3,
-    op_kwargs = {'filename': local_data, 'key':s3_data}
-)
-
-# DAG for scripts
-script_to_s3 = PythonOperator(
-    dag = dag, 
-    task_id = 'script_to_S3', 
-    python_callable = upload_to_s3, 
-    op_kwargs = {'filename': local_script, 'key': s3_script}
-)
-
-# 2. Create an EMR Cluster
-create_emr_cluster = EmrCreateJobFlowOperator(
-    task_id = 'create_emr_cluster',
-    job_flow_overrides = JOB_FLOW_OVERRIDES,
-    aws_conn_id = 'aws_default', 
-    emr_conn_id = 'emr_default', 
-    dag = dag
-)
-
-# 3. Add steps to EMR cluster
-add_step = EmrAddStepsOperator(
-    task_id = 'Add_steps',
-    job_flow_id = "{{ task_instance.xcom_pull(task_ids='create_emr_cluster',key='return_value) }}",
-    aws_conn_id = 'aws_default',
-    steps = SPARK_STEPS,
-    params = {  #Parameters to fill in the SPARK_STEPS json
-        'BUCKET_NAME': BUCKET_NAME,
-        's3_data': s3_data,
-        's3_script': s3_script,
-        's3_clean': s3_clean
-    },
-    dag = dag
-)
-
-# 4. Test that we have done all the steps
-last_step =len(SPARK_STEPS) - 1
-step_checker = EmrStepSensor(
-    task_id = 'watch_step',
-    job_flow_id = "{{ task_instance.xcom_pull('create_emr_cluster', key='return_value') }}",
-    step_id = "{{ task_instance.xcom_pull(task_ids='add_steps', key='return_value')["
-    + str(last_step)
-    +"] }}",
-    aws_conn_id = 'aws_defaul',
-    dag=dag
+    # 1. Move data and scripts to the cloud (S3)
+    # DAG for data
+    data_to_s3 = PythonOperator( 
+        dag = dag, 
+        task_id = 'data_to_S3',
+        python_callable = upload_to_s3,
+        op_kwargs = {'filename': local_data, 'key':s3_data}
     )
- 
- # 5. Terminate EMR cluster
-terminate_emr_cluster = EmrTerminateJobFlowOperator(
-    task_id = 'terminate_emr_cluster',
-    job_flow_id = "{{ task_instance.xcom_pull(task_ids='create_emr_cluster', key='return_value') }}",
-    aws_conn_id = 'aws_default',
-    dag = dag
-)
 
-# 6. End pipeline
-end_pipeline = DummyOperator(task_id = 'end_pipeline', dag = dag)
+    # DAG for scripts
+    script_to_s3 = PythonOperator(
+        dag = dag, 
+        task_id = 'script_to_S3', 
+        python_callable = upload_to_s3, 
+        op_kwargs = {'filename': local_script, 'key': s3_script}
+    )
+
+    # 2. Create an EMR Cluster
+    create_emr_cluster = EmrCreateJobFlowOperator(
+        task_id = 'create_emr_cluster',
+        job_flow_overrides = JOB_FLOW_OVERRIDES,
+        aws_conn_id = 'aws_default', 
+        emr_conn_id = 'emr_default', 
+        dag = dag
+    )
+
+    # 3. Add steps to EMR cluster
+    add_step = EmrAddStepsOperator(
+        task_id = 'Add_steps',
+        job_flow_id = "{{ task_instance.xcom_pull(task_ids='create_emr_cluster',key='return_value) }}",
+        aws_conn_id = 'aws_default',
+        steps = SPARK_STEPS,
+        params = {  #Parameters to fill in the SPARK_STEPS json
+            'BUCKET_NAME': BUCKET_NAME,
+            's3_data': s3_data,
+            's3_script': s3_script,
+            's3_clean': s3_clean
+        },
+        dag = dag
+    )
+
+    # 4. Test that we have done all the steps
+    last_step =len(SPARK_STEPS) - 1
+    step_checker = EmrStepSensor(
+        task_id = 'watch_step',
+        job_flow_id = "{{ task_instance.xcom_pull('create_emr_cluster', key='return_value') }}",
+        step_id = "{{ task_instance.xcom_pull(task_ids='add_steps', key='return_value')["
+        + str(last_step)
+        +"] }}",
+        aws_conn_id = 'aws_defaul',
+        dag=dag
+        )
+    
+    # 5. Terminate EMR cluster
+    terminate_emr_cluster = EmrTerminateJobFlowOperator(
+        task_id = 'terminate_emr_cluster',
+        job_flow_id = "{{ task_instance.xcom_pull(task_ids='create_emr_cluster', key='return_value') }}",
+        aws_conn_id = 'aws_default',
+        dag = dag
+    )
+
+    # 6. End pipeline
+    end_pipeline = DummyOperator(task_id = 'end_pipeline', dag = dag)
 
 # Order tasks
 start_pipeline_emr >> [data_to_s3, script_to_s3] >> create_emr_cluster
