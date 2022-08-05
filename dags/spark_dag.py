@@ -146,7 +146,7 @@ script_to_s3 = PythonOperator(
 # 2. Create an EMR Cluster
 create_emr_cluster = EmrCreateJobFlowOperator(
     task_id = 'create_emr_cluster',
-    job_fow_overrrides = JOB_FLOW_OVERRIDES,
+    job_flow_overrrides = JOB_FLOW_OVERRIDES,
     aws_conn_id = 'aws_default', 
     emr_conn_id = 'emr_default', 
     dag = dag
