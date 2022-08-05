@@ -21,7 +21,7 @@ class GitHubToS3Operator(BaseOperator):
         return response
     
     def execute(self,context):
-        bucket_name = "bucket_name"
+        bucket_name = " mafer-bucket-deb-220296"
         files = [
                 {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/raw_data/movie_review.zip",
                  "name":"movie_review.csv"
