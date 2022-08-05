@@ -1,4 +1,5 @@
 from airflow import DAG
+from airflow.utils.dates import days_ago
 from datetime import datetime, timedelta
 from airflow.hooks.S3_hook import S3Hook
 from airflow.operators.python_operator import PythonOperator
@@ -109,7 +110,7 @@ default_args = {
     'owner': 'airflow',
     'depends_on_past': True,
     'wait_for_downstram': True,
-    'start_date': datetime(2022, 8, 5),
+    'start_date': days_ago(1),
     'email': ["airflow@airflow.com"],
     'email_on_failure': False, 
     'email_on_retry': False, 
