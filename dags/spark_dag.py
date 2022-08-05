@@ -154,7 +154,7 @@ create_emr_cluster = EmrCreateJobFlowOperator(
 
 # 3. Add steps to EMR cluster
 add_step = EmrAddStepsOperator(
-    task_id = 'Add steps',
+    task_id = 'Add_steps',
     job_flow_id = "{{ task_instance.xcom_pull(task_ids='create_emr_cluster',key='return_value) }}",
     aws_conn_id = 'aws_default',
     steps = SPARK_STEPS,
