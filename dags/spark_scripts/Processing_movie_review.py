@@ -10,7 +10,7 @@ from pyspark.ml.feature import Tokenizer, StopWordsRemover
 spark = SparkSession.builder.getOrCreate()
 
 # Create a new data frame for movie_review.csv
-movie_df = spark.read.csv('s3://s3-data-bootcamp-20220804183240579100000005/raw/movie_review.csv', sep=',', header=True)
+movie_df = spark.read.csv('s3://emrbucketmafer/movie_review.csv', sep=',', header=True)
 
 # Take a little part of the data frame to make tests.
 mini_df = movie_df.limit(100000)
@@ -31,6 +31,6 @@ cool_df = mini_df.select("cid","id_review", array_contains(mini_df.Cleaned, "goo
 super_df= cool_df.select(col("cid"), col("id_review"),col("positive_review").cast("integer"))
 
 # Save df
-super_df.write.mode("overwrite").parquet("s3://s3-data-bootcamp-20220804183240579100000005/output/")
+super_df.write.mode("overwrite").parquet("s3://emrbucketmafer/output/")
 
 spark.stop()
