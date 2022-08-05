@@ -61,7 +61,7 @@ module "rds" {
    vpc_id_s3   = module.networking.vpc_id
    subnet_s3   = module.networking.private_subnets_ids
 
-   bucket_prefix = var.bucket_prefix
+   bucket        = var.bucket
    acl           = var.acl
    versioning    = var.versioning
  }

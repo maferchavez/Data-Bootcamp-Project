@@ -14,7 +14,7 @@ from airflow.contrib.operators.emr_terminate_job_flow_operator import (
 
 
 #Configurations for upload data to S3 bucket
-BUCKET_NAME = 'Mafer_bucket_DEB'
+BUCKET_NAME = 'mafer-bucket-deb-220296'
 local_data = "C:/Users/maryf/Documents/Data-bootcamp/Data-Bootcamp-Project/raw_data/movie_review.zip"
 s3_data = 'raw_data/movie_review.zip'
 local_script = 'C:/Users/maryf/Documents/Data-bootcamp/Data-Bootcamp-Project/dags/spark_scripts/Processing_movie_review.py'

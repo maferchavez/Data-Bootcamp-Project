@@ -64,7 +64,7 @@ db_password = "dbpassword"
 publicly_accessible = false
 
 #### S3 variables ####
-bucket = "Mafer_bucket_DEB"
+bucket = "mafer-bucket-deb-220296"
 
 acl = "public-read-write"
 
