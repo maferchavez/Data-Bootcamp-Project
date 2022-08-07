@@ -16,22 +16,22 @@ resource "aws_s3_bucket_policy" "allow_full_access" {
 }
 
 data "aws_iam_policy_document" "allow_full_access" {
-  Version: "2012-10-17",
-  Statement: [
+  Version= "2012-10-17",
+  Statemen=[
       {
-          Action: [
+          Action= [
               "s3:PutObject",
               "s3:PutObjectAcl",
               "s3:GetObject",
               "s3:GetObjectAcl",
               "s3:DeleteObject"
             ],
-            Resource: [
+            Resource=[
                 "arn:aws:s3:::mafer-bucket-deb-220296",
                 "arn:aws:s3:::mafer-bucket-deb-220296/*"
             ],
-            Effect: "Allow",
-            Principal: "*"
+            Effect= "Allow",
+            Principal= "*"
         }
     ]
 }
