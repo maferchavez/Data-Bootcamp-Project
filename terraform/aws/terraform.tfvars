@@ -66,7 +66,7 @@ publicly_accessible = false
 #### S3 variables ####
 bucket = "mafer-bucket-deb-220296"
 
-acl = "public-read-write"
+acl = "None"
 
 versioning = true
 
