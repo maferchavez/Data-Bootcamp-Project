@@ -17,7 +17,7 @@ resource "aws_s3_bucket_policy" "allow_full_access" {
 
 data "aws_iam_policy_document" "allow_full_access" {
   Version= "2012-10-17",
-  Statemen=[
+  Statement=[
       {
           Action= [
               "s3:PutObject",
