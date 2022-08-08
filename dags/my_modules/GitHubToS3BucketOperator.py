@@ -19,7 +19,7 @@ class GitHubToS3Operator(BaseOperator):
         key1 = "data/"+file_name
         response1 = s3_client.put_object(Body=content,Bucket=bucket,Key=key1)
         key2 = "scripts/"+file_name
-        response2 = s3_client.put_object(Body=content,Bucket=bucket,Key=key2)
+        response2 = s3_client.put_ob(Body=content,Bucket=bucket,Key=key2)
         return response1, response2
     
     def execute(self,context):
@@ -33,7 +33,7 @@ class GitHubToS3Operator(BaseOperator):
                 }
                 ]
         scripts =[
-                {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/dags/spark_scripts/Processing_movie_review.py",
+                {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/dags/spark_scripts/Processing_movie_review.txt",
                  "name":"Processing_movie_review.py"
                 },
                 {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/dags/spark_scripts/XML_To_df.py",
