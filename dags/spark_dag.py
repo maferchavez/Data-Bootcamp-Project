@@ -17,7 +17,7 @@ from airflow.contrib.operators.emr_terminate_job_flow_operator import (
 BUCKET_NAME = 'mafer-bucket-deb-220296'
 s3_clean = 'clean/data' #create the path to put the data once processed
 s3_data = "s3://mafer-bucket-deb-220296/data/movie_review.csv"
-s3_script = "s3://mafer-bucket-deb-220296/Processing_movie_review.py"
+s3_script = "Processing_movie_review.py"
 
 
 # Configurations for create an EMR cluster
@@ -83,7 +83,7 @@ SPARK_STEPS = [
                 'spark-submit', # This is for submmiting a spark job using the spark script in S3
                 '--deploy-mode',
                 'client',
-                's3://{{ params.BUCKET_NAME }}/Processing_movie_review.py'
+                's3://{{ params.BUCKET_NAME }}/{{ params.s3_script }}'
             ]
         }
     },
