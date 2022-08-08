@@ -36,7 +36,7 @@ JOB_FLOW_OVERRIDES = {
             ]
         }
     ],
-    'Instance   s': {
+    'Instances': {
         'InstanceGroups': [
             {
                 'Name': 'Master node',
