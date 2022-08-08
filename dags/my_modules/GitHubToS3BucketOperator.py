@@ -44,5 +44,5 @@ class GitHubToS3Operator(BaseOperator):
             df = self.get_data(file["url"])
             self.send_to_bucket(df,bucket_name,file.get("name"))
         for script in scripts:
-            self.send_to_bucket(script,bucket_name,script.get("name"))
+            self.send_to_bucket(script,bucket_name,file.get("name"))
     
