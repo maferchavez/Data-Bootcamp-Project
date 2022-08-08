@@ -28,7 +28,7 @@ class GitHubToS3Operator(BaseOperator):
                 },
                 {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/raw_data/log_reviews.zip",
                 "name":"log_reviews.csv"
-                }
+                },
                 ]
         
         for file in files:
