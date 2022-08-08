@@ -18,8 +18,8 @@ class GitHubToS3Operator(BaseOperator):
         #aws_secret_access_key="")
         key1 = "data/"+file_name
         response1 = s3_client.put_object(Body=content,Bucket=bucket,Key=key1)
-        key2 = "scripts/"+file_name
-        response2 = s3_client.put_object(Body=content,Bucket=bucket,Key=key2)
+        #key2 = "scripts/"+file_name
+        #esponse2 = s3_client.put_object(Body=content,Bucket=bucket,Key=key2)
         return response1, response2
     
     def execute(self,context):
@@ -32,17 +32,17 @@ class GitHubToS3Operator(BaseOperator):
                 "name":"log_reviews.csv"
                 }
                 ]
-        scripts =[
-                {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/dags/spark_scripts/Processing_movie_review.txt",
-                 "name":"Processing_movie_review.py"
-                },
-                {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/dags/spark_scripts/XML_To_df.py",
-                "name":"XML_to_df.py"
-                }
-                ]
+        #scripts =[
+        #        {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/dags/spark_scripts/Processing_movie_review.txt",
+        #         "name":"Processing_movie_review.py"
+        #        },
+        #        {"url":"https://raw.githubusercontent.com/maferchavez/Data-Bootcamp-Project/main/dags/spark_scripts/XML_To_df.py",
+        #        "name":"XML_to_df.py"
+        #        }
+        #        ]
         for file in files:
             df = self.get_data(file["url"])
             self.send_to_bucket(df,bucket_name,file.get("name"))
-        for script in scripts:
-            self.send_to_bucket(script,bucket_name,script.get("name"))
+        #for script in scripts:
+        #    self.send_to_bucket(script,bucket_name,script.get("name"))
     
