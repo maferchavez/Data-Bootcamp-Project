@@ -16,6 +16,9 @@ from airflow.contrib.operators.emr_terminate_job_flow_operator import (
 #Configurations
 BUCKET_NAME = 'mafer-bucket-deb-220296'
 s3_clean = 'clean/data' #create the path to put the data once processed
+s3_data = "s3://mafer-bucket-deb-220296/data/movie_review.csv"
+s3_script = "s3://mafer-bucket-deb-220296/Processing_movie_review.py"
+
 
 # Configurations for create an EMR cluster
 JOB_FLOW_OVERRIDES = {
