@@ -23,7 +23,7 @@ s3_script = "Processing_movie_review.py"
 # Configurations for create an EMR cluster
 JOB_FLOW_OVERRIDES = {
     'Name': 'Processing data', # This is the name of the EMR cluster
-    'RealeaseLabel': 'emr-5.29.0', #EMR version
+    'ReleaseLabel': 'emr-5.29.0', #EMR version
     'Applications': [{'Name':'Hadoop'}, {'Name': 'Spark'}], # This includes the "features" of the culster
     'Configurations': [ # By default EMR uses Python2, it will be change to Python3
         {
