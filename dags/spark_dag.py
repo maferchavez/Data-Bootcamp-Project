@@ -115,8 +115,8 @@ default_args = {
 with DAG(
     'spark_submit_airflow',
     default_args = default_args,
-    schedule_interval = '0 10 * * *',
-    max_active_runs = 1
+    schedule_interval = '@once',
+    #max_active_runs = 1
 ) as dag:
     # 0. start pipeline
     start_pipeline_emr = DummyOperator(task_id = 'start_pipeline_emr')
