@@ -16,9 +16,9 @@ class GitHubToS3Operator(BaseOperator):
         s3_client = client("s3")
         #s3_client = client("s3",aws_access_key_id="",
         #aws_secret_access_key="")
-        key1 = "data/"+file_name
-        response1 = s3_client.put_object(Body=content,Bucket=bucket,Key=key1)
-        return response1
+        key = "data/"+file_name
+        response = s3_client.put_object(Body=content,Bucket=bucket,Key=key)
+        return response
     
     def execute(self,context):
         bucket_name = "mafer-bucket-deb-220296"
