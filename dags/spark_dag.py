@@ -1,7 +1,6 @@
 from airflow import DAG
 from airflow.utils.dates import days_ago
 from datetime import datetime, timedelta
-from airflow.hooks.S3_hook import S3Hook
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy import DummyOperator
 from airflow.contrib.operators.emr_create_job_flow_operator import (
@@ -14,12 +13,9 @@ from airflow.contrib.operators.emr_terminate_job_flow_operator import (
 )
 
 
-#Configurations for upload data to S3 bucket
+#Configurations
 BUCKET_NAME = 'mafer-bucket-deb-220296'
-local_data = "C:/Users/maryf/Documents/Data-bootcamp/Data-Bootcamp-Project/raw_data/movie_review.zip"
-s3_data = 'raw_data/movie_review.zip'
-local_script = 'C:/Users/maryf/Documents/Data-bootcamp/Data-Bootcamp-Project/dags/spark_scripts/Processing_movie_review.py'
-s3_script = 'spark_scripts/Processing_movie_review.py'
+s3_clean = 'clean/data' #create the path to put the data once processed
 
 # Configurations for create an EMR cluster
 JOB_FLOW_OVERRIDES = {
@@ -62,7 +58,6 @@ JOB_FLOW_OVERRIDES = {
 }
 
 # Configuration of EMR steps
-s3_clean = 'clean/data' #create the path to put the data once processed
 SPARK_STEPS = [
     {
         'Name': 'Move raw data from S3 to HDFS', # Name of the step, HDFS means Hadoop Distributed File System
@@ -85,7 +80,7 @@ SPARK_STEPS = [
                 'spark-submit', # This is for submmiting a spark job using the spark script in S3
                 '--deploy-mode',
                 'client',
-                's3://{{ params.BUCKET_NAME }}/{{ params.s3_script }}'
+                's3://{{ params.BUCKET_NAME }}/Processing_movie_review.py'
             ]
         }
     },
@@ -101,10 +96,6 @@ SPARK_STEPS = [
         }
     }
 ]
-
-def upload_to_s3 (filename, key, bucket_name = BUCKET_NAME):
-    s3 = S3Hook()
-    s3.load_file(filename = filename, bucket_name = bucket_name, replace = True, key = key)
 
 default_args = {
     'owner': 'airflow',
@@ -127,24 +118,7 @@ with DAG(
     # 0. start pipeline
     start_pipeline_emr = DummyOperator(task_id = 'start_pipeline_emr')
 
-    # 1. Move data and scripts to the cloud (S3)
-    # DAG for data
-    data_to_s3 = PythonOperator( 
-        dag = dag, 
-        task_id = 'data_to_S3',
-        python_callable = upload_to_s3,
-        op_kwargs = {'filename': local_data, 'key':s3_data}
-    )
-
-    # DAG for scripts
-    script_to_s3 = PythonOperator(
-        dag = dag, 
-        task_id = 'script_to_S3', 
-        python_callable = upload_to_s3, 
-        op_kwargs = {'filename': local_script, 'key': s3_script}
-    )
-
-    # 2. Create an EMR Cluster
+    # 1. Create an EMR Cluster
     create_emr_cluster = EmrCreateJobFlowOperator(
         task_id = 'create_emr_cluster',
         job_flow_overrides = JOB_FLOW_OVERRIDES,
@@ -153,7 +127,7 @@ with DAG(
         dag = dag
     )
 
-    # 3. Add steps to EMR cluster
+    # 2. Add steps to EMR cluster
     add_step = EmrAddStepsOperator(
         task_id = 'Add_steps',
         job_flow_id = "{{ task_instance.xcom_pull(task_ids='create_emr_cluster',key='return_value) }}",
@@ -168,7 +142,7 @@ with DAG(
         dag = dag
     )
 
-    # 4. Test that we have done all the steps
+    # 3. Test that we have done all the steps
     last_step =len(SPARK_STEPS) - 1
     step_checker = EmrStepSensor(
         task_id = 'watch_step',
@@ -180,7 +154,7 @@ with DAG(
         dag=dag
         )
     
-    # 5. Terminate EMR cluster
+    # 4. Terminate EMR cluster
     terminate_emr_cluster = EmrTerminateJobFlowOperator(
         task_id = 'terminate_emr_cluster',
         job_flow_id = "{{ task_instance.xcom_pull(task_ids='create_emr_cluster', key='return_value') }}",
@@ -188,10 +162,9 @@ with DAG(
         dag = dag
     )
 
-    # 6. End pipeline
+    # 5. End pipeline
     end_pipeline = DummyOperator(task_id = 'end_pipeline', dag = dag)
 
 # Order tasks
-start_pipeline_emr >> [data_to_s3, script_to_s3] >> create_emr_cluster
-create_emr_cluster >> add_step >> step_checker >> terminate_emr_cluster
-terminate_emr_cluster >> end_pipeline
+start_pipeline_emr >> create_emr_cluster >> add_step >> step_checker
+step_checker >> terminate_emr_cluster >> end_pipeline
