@@ -84,7 +84,7 @@ Schema, Login and Password can be found in terraform.tfvars file.
 
 -Connection Type: Amazon Elastic MapReduce
 
-1.  
+  
      c. Make your bucket public.
 On AWS console go to S3 and select the bucket you create with terraform. Go to “permissions” and copy the json below with your bucket name.
 
