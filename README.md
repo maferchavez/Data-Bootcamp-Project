@@ -41,12 +41,11 @@ If you have a Windows computer, maybe you will face some issues, if you cannot i
 
   and repeat the NFS_SERVER_NAME part.
 
-4.  Everything should work, and you can continue installing airflow at is it mentioned in terraform/Kubernetes/README.
-Before you see what is happening with your dags, you need to do some changes on it.
+4.  Everything should work, and you can continue installing airflow at is it mentioned in terraform/Kubernetes/README. Before you see what is happening with your dags, you need to do some changes.
 
-On dags/my_modules/GitHubToS3BucketOperator.py in function “execute”, you need to change the bucker_name for your bucket’s name. Do the same on dags/spark_dag.py. Look for BUCKET_NAME and change it.
-
-Make some connections on airflow. You will need to add 3 connections.
+  -On dags/my_modules/GitHubToS3BucketOperator.py in function “execute”, you need to change the bucker_name for your bucket’s name. Do the same on dags/spark_dag.py. Look for BUCKET_NAME and change it.
+  
+  Make some connections on airflow. You will need to add 3 connections.
    
 ![airflowconn.png](images/airflowconn.png)
 
@@ -56,23 +55,23 @@ Make some connections on airflow. You will need to add 3 connections.
 ![airflowwindow.png](images/airflowwindow.png)
 
 ### Postgres Connection:
--•	Connection ID: example
--•	Connectrion Type: Postgres
--•	Host: look for your host on AWS RDS console 
+-Connection ID: example
+-Connectrion Type: Postgres
+-Host: look for your host on AWS RDS console 
 
 ![rdshost.png](images/rdshost.png)
 
--•	Schema: dbname
--•	Login: dbuser
--•	Password: dbpassword.
+-Schema: dbname
+-Login: dbuser
+-Password: dbpassword.
 Schema, Login and Password can be found in terraform.tfvars file.
 ### AWS connection:
--•	Connection ID: aws_default
--•	Connection type: Amazon web Services
--•	Extras: {"region_name":"us-east-2"} (or your region)
+-Connection ID: aws_default
+-Connection type: Amazon web Services
+-Extras: {"region_name":"us-east-2"} (or your region)
 ### EMR connection:
--•	Connection ID: emr_default
--•	Connection Type: Amazon Elastic MapReduce
+-Connection ID: emr_default
+-Connection Type: Amazon Elastic MapReduce
   -Make your bucket public.
 On AWS console go to S3 and select the bucket you create with terraform. Go to “permissions” and copy the json below with your bucket name.
 ![aclpolicys3.png](images/aclpolicys3.png)•	Schema: dbname
