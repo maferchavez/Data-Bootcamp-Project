@@ -55,7 +55,9 @@ If you have a Windows computer, maybe you will face some issues, if you cannot i
 
 ### Postgres Connection:
 -Connection ID: example
+
 -Connectrion Type: Postgres
+
 -Host: look for your host on AWS RDS console 
 
 ![rdshost.png](images/rdshost.png)
