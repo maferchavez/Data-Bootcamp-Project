@@ -45,14 +45,11 @@ If you have a Windows computer, maybe you will face some issues, if you cannot i
     
     a. On dags/my_modules/GitHubToS3BucketOperator.py in function “execute”, you need to change the bucker_name for your bucket’s name. Do the same on dags/spark_dag.py. Look for BUCKET_NAME and change it.
     
-    b. Make some connections on airflow. You will need to add 3 connections. To make a connection on airflow,go to the UI,Admin/Connections
+    b. Make some connections on airflow. You will need to add 3 connections. To make a connection on airflow, go to the UI, Admin/Connections.
+   ![airflowconn.png](images/airflowconn.png)
    
-![airflowconn.png](images/airflowconn.png)
-
-   Click on “+” icon
-  -Then in the following window you’ll fill in the blanks.
-  
-![airflowwindow.png](images/airflowwindow.png)
+   Click on “+” icon and in the following window fill in the blanks.
+   ![airflowwindow.png](images/airflowwindow.png)
 
 ### Postgres Connection:
 -Connection ID: example
