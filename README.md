@@ -42,6 +42,7 @@ If you have a Windows computer, maybe you will face some issues, if you cannot i
   and repeat the NFS_SERVER_NAME part.
 
 4.  Everything should work, and you can continue installing airflow at is it mentioned in terraform/Kubernetes/README. Before you see what is happening with your dags, you need to do some changes.
+    
     On dags/my_modules/GitHubToS3BucketOperator.py in function “execute”, you need to change the bucker_name for your bucket’s name. Do the same on dags/spark_dag.py. Look for BUCKET_NAME and change it.
   
   Make some connections on airflow. You will need to add 3 connections.
