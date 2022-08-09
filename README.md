@@ -25,8 +25,8 @@ If you have a Windows computer, maybe you will face some issues, if you cannot i
 
 The “NFS_SERVER_NAME” is the efs that is showed on your terminal when you have finished the previous steps of terraform/aws. It will show 3 variables like this:
 
-_cluster_name = "airflow-eks-data-bootcamp"
-efs ="fs-03f12ba0379a331bd.efs.us-east-2.amazonaws.com"
-region = "us-east-2"
-_
+*cluster_name = "airflow-eks-data-bootcamp"*
+*efs ="fs-03f12ba0379a331bd.efs.us-east-2.amazonaws.com"*
+*region = "us-east-2"*
+
 
