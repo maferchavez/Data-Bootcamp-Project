@@ -16,6 +16,7 @@ After that, follow the instructions attach in the [README](https://github.com/ma
 ### Problem installing airflow (Windows)
 If you have a Windows computer, maybe you will face some issues, if you cannot install airflow as how it is described [here](https://github.com/maferchavez/Data-Bootcamp-Project/blob/main/terraform/kubernetes/README.md). Follow this instructions.
 1.	Open your cmd (not PowerShell, not Git-Bash) and run all these commands from the terraform/Kubernetes folder.
+
 `kubectl create namespace storage`
 
 `helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/`
