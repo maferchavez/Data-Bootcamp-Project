@@ -63,18 +63,28 @@ If you have a Windows computer, maybe you will face some issues, if you cannot i
 ![rdshost.png](images/rdshost.png)
 
 -Schema: dbname
+
 -Login: dbuser
--Password: dbpassword.
+
+-Password: dbpassword
+
 -Schema: dbname
+
 Schema, Login and Password can be found in terraform.tfvars file.
+
 ### AWS connection:
 -Connection ID: aws_default
+
 -Connection type: Amazon web Services
+
 -Extras: {"region_name":"us-east-2"} (or your region)
+
 ### EMR connection:
 -Connection ID: emr_default
+
 -Connection Type: Amazon Elastic MapReduce
-  -Make your bucket public.
+
+  c.Make your bucket public.
 On AWS console go to S3 and select the bucket you create with terraform. Go to “permissions” and copy the json below with your bucket name.
 
 ![aclpolicys3.png](images/aclpolicys3.png)
