@@ -15,7 +15,7 @@ On terraform/aws/modules/s3/main.tf you will need to change the path. Put your l
 After that, follow the instructions attach in the [README](https://github.com/maferchavez/Data-Bootcamp-Project/blob/main/terraform/aws/README.md) part of terraform/aws to create your Kubernetes cluster and install airflow inside the cluster.
 ### Problem installing airflow (Windows)
 If you have a Windows computer, maybe you will face some issues, if you cannot install airflow as how it is described [here](https://github.com/maferchavez/Data-Bootcamp-Project/blob/main/terraform/kubernetes/README.md). Follow this instructions.
-1.	Open your cmd (not PowerShell, not Git-Bash) and run all these commands from the terraform/Kubernetes folder.
+1.	Open your cmd (not PowerShell, not Git-Bash) and run all these commands from the terraform/kubernetes folder.
 
 `kubectl create namespace storage`
 
@@ -23,13 +23,13 @@ If you have a Windows computer, maybe you will face some issues, if you cannot i
 
 `helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --namespace storage --set nfs.server=“NFS_SERVER_NAME” --set nfs.path=/`
 
-The “NFS_SERVER_NAME” is the efs that is showed on your terminal when you have finished the previous steps of terraform/aws. It will show 3 variables like this:
+  The “NFS_SERVER_NAME” is the efs that is showed on your terminal when you have finished the previous steps of terraform/aws. It will show 3 variables like this:
 
-*cluster_name = "airflow-eks-data-bootcamp"*
+  *cluster_name = "airflow-eks-data-bootcamp"*
 
-*__efs ="fs-03f12ba0379a331bd.efs.us-east-2.amazonaws.com"__*
+  *__efs ="fs-03f12ba0379a331bd.efs.us-east-2.amazonaws.com"__*
 
-*region = "us-east-2"*
+  *region = "us-east-2"*
 
 2.	Replace the NFS_SERVER_NAME with your efs.
 
@@ -39,5 +39,6 @@ The “NFS_SERVER_NAME” is the efs that is showed on your terminal when you ha
 
 `	helm repo update`
 
-and repeat the NFS_SERVER_NAME part.  
+  and repeat the NFS_SERVER_NAME part.
+
 4.  Everything should work, and you can continue installing airflow at is it mentioned in terraform/Kubernetes/README.
