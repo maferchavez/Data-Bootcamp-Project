@@ -48,29 +48,29 @@ Before you see what is happening with your dags, you need to do some changes on 
    
 ![airflowconn.png](images/airflowconn.png)
 
-    Click on “+” icon
+   Click on “+” icon
   -Then in the following window you’ll fill in the blanks.
   
 ![airflowwindow.png](images/airflowwindow.png)
 
 ### Postgres Connection:
-•	Connection ID: example
-•	Connectrion Type: Postgres
-•	Host: look for your host on AWS RDS console 
+-•	Connection ID: example
+-•	Connectrion Type: Postgres
+-•	Host: look for your host on AWS RDS console 
 
 ![rdshost.png](images/rdshost.png)
 
-•	Schema: dbname
-•	Login: dbuser
-•	Password: dbpassword.
+-•	Schema: dbname
+-•	Login: dbuser
+-•	Password: dbpassword.
 Schema, Login and Password can be found in terraform.tfvars file.
 ### AWS connection:
-•	Connection ID: aws_default
-•	Connection type: Amazon web Services
-•	Extras: {"region_name":"us-east-2"} (or your region)
+-•	Connection ID: aws_default
+-•	Connection type: Amazon web Services
+-•	Extras: {"region_name":"us-east-2"} (or your region)
 ### EMR connection:
-•	Connection ID: emr_default
-•	Connection Type: Amazon Elastic MapReduce
+-•	Connection ID: emr_default
+-•	Connection Type: Amazon Elastic MapReduce
   -Make your bucket public.
 On AWS console go to S3 and select the bucket you create with terraform. Go to “permissions” and copy the json below with your bucket name.
 ![aclpolicys3.png](images/aclpolicys3.png)•	Schema: dbname
