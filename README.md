@@ -26,7 +26,18 @@ If you have a Windows computer, maybe you will face some issues, if you cannot i
 The “NFS_SERVER_NAME” is the efs that is showed on your terminal when you have finished the previous steps of terraform/aws. It will show 3 variables like this:
 
 *cluster_name = "airflow-eks-data-bootcamp"*
-*efs ="fs-03f12ba0379a331bd.efs.us-east-2.amazonaws.com"*
+
+*__efs ="fs-03f12ba0379a331bd.efs.us-east-2.amazonaws.com"__*
+
 *region = "us-east-2"*
 
+2.	Replace the NFS_SERVER_NAME with your efs.
 
+`helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --namespace storage --set nfs.server="fs-03f12ba0379a331bd.efs.us-east-2.amazonaws.com" --set nfs.path=/`
+
+3.	If this is not working try:
+
+`	helm repo update`
+
+and repeat the NFS_SERVER_NAME part.  
+4.  Everything should work, and you can continue installing airflow at is it mentioned in terraform/Kubernetes/README.
